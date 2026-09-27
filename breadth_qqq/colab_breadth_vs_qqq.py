@@ -2,7 +2,7 @@
 # Paste this whole thing into ONE Colab cell and press play (Shift+Enter). First run takes ~5-10 minutes
 # (downloads ~12 years of daily bars for ~1,500 stocks); re-runs the same day use the cache.
 
-!pip -q install -U yfinance plotly statsmodels
+!pip -q install -U yfinance     # plotly and statsmodels are already in Colab
 
 START_DATE = "2014-06-01"      # data download start (a year+ of warm-up for 52-week highs, 50dma, etc.)
 ANALYSIS_START = "2016-09-27"  # the 10-year test window starts here
@@ -19,7 +19,7 @@ WEIGHTS = {
     "50dma trend (5d)": 0.05, "S&P trend": 0.05,
 }
 
-import io, os, time, json, pickle, warnings
+import io, os, time, json, pickle, warnings, contextlib
 from datetime import datetime
 import numpy as np
 import pandas as pd
@@ -29,6 +29,10 @@ import statsmodels.api as sm
 from statsmodels.tsa.stattools import grangercausalitytests
 from IPython.display import HTML, display
 warnings.filterwarnings("ignore")
+T0 = time.time()
+def step(msg):
+    print(f"[{(time.time() - T0) / 60:4.1f} min] {msg}", flush=True)
+step("Libraries loaded.")
 RNG = np.random.default_rng(7)
 UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                     "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"}
@@ -80,7 +84,7 @@ def download_prices(tickers, chunk=100, pause=1.0):
             if not isinstance(d.columns, pd.MultiIndex):
                 d.columns = pd.MultiIndex.from_product([d.columns, batch])
             frames.append(_clean_index(d))
-        print(f"  downloaded {min(i + chunk, len(tickers)):,}/{len(tickers):,}", end="\r")
+        step(f"  downloaded {min(i + chunk, len(tickers)):,} of {len(tickers):,} tickers")
         time.sleep(pause)
     raw = pd.concat(frames, axis=1)
     return raw.loc[:, ~raw.columns.duplicated()]
@@ -91,10 +95,12 @@ def load_data():
         with open(CACHE_FILE, "rb") as f:
             cached = pickle.load(f)
         if cached.get("key") == key:
-            print("Using prices cached earlier today.")
+            step("Using prices cached earlier today (skipping the download).")
             return cached["px"]
+    step("Step 1 of 4: getting the S&P 1500 ticker list from Wikipedia...")
     tickers = sp1500()
-    print(f"Universe: {len(tickers):,} current S&P 1500 members. Downloading daily bars since {START_DATE}...")
+    step(f"Step 1 of 4: downloading daily bars since {START_DATE} for {len(tickers):,} stocks "
+         f"(about 5-10 minutes; a line prints every 100 tickers)...")
     raw = download_prices(tickers)
     px = {f: raw[f] for f in ["Close", "High", "Low", "Volume"]}
     good = px["Close"].notna().sum() >= 60
@@ -103,7 +109,7 @@ def load_data():
     px["QQQ"] = _one("QQQ")          # dividend-adjusted, so returns include dividends
     with open(CACHE_FILE, "wb") as f:
         pickle.dump({"key": key, "px": px}, f)
-    print(f"\nGot usable data for {good.sum():,} tickers.")
+    step(f"Got usable data for {good.sum():,} tickers.")
     return px
 
 # ============================================================== 2. breadth (same formulas as the dashboard)
@@ -374,7 +380,8 @@ def analyze(b, qqq):
     for var in wk.columns[1:]:
         row = {"var": var}
         for d, cols in [("b2q", ["QQQ weekly return", var]), ("q2b", [var, "QQQ weekly return"])]:
-            g = grangercausalitytests(wk[cols], maxlag=4)
+            with contextlib.redirect_stdout(io.StringIO()):     # older statsmodels prints every test
+                g = grangercausalitytests(wk[cols], maxlag=4)
             row[d] = min(g[l][0]["ssr_ftest"][1] for l in (1, 2, 4))
             row[d + "1"] = g[1][0]["ssr_ftest"][1]
         R["granger"].append(row)
@@ -744,10 +751,13 @@ def paste_back(R):
 
 # ============================================================== run
 px_data = load_data()
+step("Step 2 of 4: computing the breadth indicators for every day...")
 breadth, _ = add_score(compute_breadth(px_data))
 qqq = px_data["QQQ"].dropna()
-print(f"Breadth history: {breadth.index[0]:%Y-%m-%d} to {breadth.index[-1]:%Y-%m-%d}. Running tests...")
+step(f"Step 3 of 4: breadth history {breadth.index[0]:%Y-%m-%d} to {breadth.index[-1]:%Y-%m-%d}. "
+     f"Running the statistical tests (about a minute)...")
 R = analyze(breadth, qqq)
+step("Step 4 of 4: building the report...")
 report_html = render(R)
 display(HTML(report_html))
 charts(R)
