@@ -102,3 +102,17 @@ $760k start, $6.5k/mo floor or 0.7%, margin and outside debt ON. v6 engine, 2,00
 | `results/` | All result tables (`ladder_grid.csv` = the drawdown-trigger grid; `v6_modes.csv` = plan outcomes above) |
 
 Run the research with `QQQ_XLSX=<full 1999+ export> python3 scorecard.py`, or `python3 experiments.py final`.
+
+## Playbook: start balance, withdrawal and cruising leverage
+`results/plan_grid_start_withdrawal_leverage.csv` holds v6-engine runs for $760k and $900k starts, $3.5k–$6.5k/mo, with and without the 0.7%-of-equity add-on, 9 leverage setups and two return pools. "2005" is your v5 generator. "1999" puts the 2000–02 crash in the pool, so it is the harsher test.
+
+| Setup (recommended rule unless noted) | Ruin, 2005 pool | Ruin, 1999 pool | Median at yr 10 (2005 pool) | Reached $1.5M |
+|---|---|---|---|---|
+| $760k, $6.5k floor + 0.7%, vol target 28% | 8.4% | 24.1% | $1.13M | 57% |
+| $760k, $6.5k floor + 0.7%, vol target 32% | 9.2% | 25.7% | $1.17M | 59% |
+| $760k, $6.5k floor + 0.7%, flat 1.3x | 10.6% | 30.2% | $0.98M | 51% |
+| $900k, $6.5k floor + 0.7% | 4.7% | 17.2% | $1.52M | 72% |
+| $900k, fixed $4,500/mo | 0.6% | 5.8% | $2.47M | 82% |
+| **$900k, fixed $4,000/mo** | **0.4%** | **3.6%** | **$2.60M** | **83%** |
+
+Run `daily_signal.py` after each close. It prints the regime, volatility and target leverage (with the QLD/QQQ mix), plus the QQQ prices where the regime-exit and dip rules kick in.
