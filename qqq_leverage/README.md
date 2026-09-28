@@ -173,3 +173,15 @@ History from Jan 2005, with the regime state carried in from before:
 The windows overlap heavily, so they amount to only about two independent decades.
 
 **Dip frequency.** Drops of 20%+ below the 52-week high while the regime was ON: 2000-04, 2008-01, 2018-12, 2020-03, 2022-03, 2025-04. That is about one every 4–5 years. Drops of 25%+ while ON: only 2000-04 and 2020-03.
+
+### Final options: $900k at $7k/mo, or a $5k/mo job
+Recommended rule (vol 28% + dip adds) with the margin/HELOC rules on; 3,000 paths; 2005 pool (1999 pool in brackets). Full table: `results/final_options_900k_job.csv`.
+
+| Scenario | Yr-5 median | Below start at yr 5 | Ran out by yr 10 | Below start at yr 10 |
+|---|---|---|---|---|
+| $760k, $6.5k/mo | $929k | 40% (57%) | 8.8% (24%) | 36% (58%) |
+| $900k, $7k/mo | $1.16M | 37% (54%) | 6.1% (19%) | 32% (54%) |
+| $760k, $6.5k + $5k job for 3 yrs | $1.22M | 25% (41%) | 2.9% (12%) | 22% (44%) |
+| $760k, $6.5k + $5k job for 5 yrs | $1.35M | 17% (33%) | 1.0% (6%) | 17% (37%) |
+| $760k, $6.5k + $5k job for all 10 yrs | $1.35M | 17% (33%) | 0.0% (0.1%) | 7.5% (23%) |
+| $900k, $7k + $5k job for 3 yrs | $1.45M | 24% (41%) | 1.9% (10%) | 20% (43%) |
