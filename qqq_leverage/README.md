@@ -116,3 +116,19 @@ Run the research with `QQQ_XLSX=<full 1999+ export> python3 scorecard.py`, or `p
 | **$900k, fixed $4,000/mo** | **0.4%** | **3.6%** | **$2.60M** | **83%** |
 
 Run `daily_signal.py` after each close. It prints the regime, volatility and target leverage (with the QLD/QQQ mix), plus the QQQ prices where the regime-exit and dip rules kick in.
+
+### Build-up: what each change adds
+Each step adds one change on top of the previous one. Return and max drawdown are from history, Dec 1999 → Sep 2026, with no withdrawals. The plan columns are $760k at $6.5k + 0.7%, run in the v6 engine on the 2005 pool (ruin in the 1999 pool in brackets).
+
+| Step | Annual return | Added | Max drawdown | Plan median | Plan ruin |
+|---|---|---|---|---|---|
+| No trend filter, flat 1.3x | 7.4% | | −91.6% | | |
+| 0. Regime filter + flat 1.3x (baseline) | 16.7% | +9.3 from the filter | −46.5% | $981k | 10.6% (30.2%) |
+| 1. + vol target 32% (1.0–1.6x) | 17.9% | +1.2 | −36.5% | $1.10M | 9.7% (26.2%) |
+| 2. + deep-dip add-on (= recommended) | 19.7% | +1.8 | −42.7% | $1.17M | 9.2% (25.7%) |
+| 3. + cap 1.8 | 20.2% | +0.5 | −42.7% | $1.21M | 9.8% (26.0%) |
+| 4. + cheaper financing (4.6% vs 5.45%) | 20.7% | +0.5 | −42.6% | $1.27M | 9.4% (25.4%) |
+| 5. + RSI(2) boost (fragile) | 22.3% | +1.6 | −43.6% | $1.36M | 9.2% (24.8%) |
+| 6. + fixed $6.5k (drop the 0.7% add-on) | — | — | — | $1.67M | 9.2% (24.8%) |
+
+Same risk at $900k as $760k at $6.5k: about **$7,700/mo**, i.e. the same ~10.3% withdrawal rate (`results/buildup_and_900k_match.csv`).
