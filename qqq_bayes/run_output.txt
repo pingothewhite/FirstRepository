@@ -1,104 +1,101 @@
-Loaded /tmp/claude-0/-home-user-FirstRepository/fef22189-9676-590c-b565-bde2fa68d89b/scratchpad/QQQ-history.xlsx: 2016-09-27 → 2026-09-25 (2513 rows)
-Cookie fetch from fc.yahoo.com failed (ConnectionError), continuing without it
-Cookie/crumb fetch failed (ConnectionError), continuing without crumb
-Failed to get ticker 'QQQ' reason: Failed to perform, curl: (7) CONNECT tunnel failed, response 403. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.
-Cookie/crumb fetch failed (ConnectionError), continuing without crumb
+Loaded /tmp/claude-0/-home-user-FirstRepository/fef22189-9676-590c-b565-bde2fa68d89b/scratchpad/QQQ-history-full.xlsx: 1999-03-11 → 2026-09-25 (6929 rows)
 
-1 Failed download:
-['QQQ']: ConnectionError('Failed to perform, curl: (7) CONNECT tunnel failed, response 403. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
 yfinance unavailable (IndexError); using file only.
 
 As-of 2026-09-25  QQQ = 744.50
-  Price vs 200-day avg (%)              12.10   (historical percentile  69.2)
-  Distance from all-time high (%)       -0.40   (historical percentile  80.2)
-  Trailing 12-month return (%)          25.48   (historical percentile  50.0)
-  RSI(14)                               64.93   (historical percentile  75.3)
-  21-day realized vol (ann. %)          16.03   (historical percentile  37.1)
+  Price vs 200-day avg (%)              12.10   (historical percentile  79.1)
+  Distance from all-time high (%)       -0.40   (historical percentile  90.7)
+  Trailing 12-month return (%)          25.48   (historical percentile  66.9)
+  RSI(14)                               64.93   (historical percentile  79.4)
+  21-day realized vol (ann. %)          16.03   (historical percentile  41.0)
 
 Feature correlation:
               dist_200dma  drawdown  mom_12m  rsi_14  vol_21d
-dist_200dma         1.00      0.78     0.79    0.58    -0.52
-drawdown            0.78      1.00     0.80    0.50    -0.58
-mom_12m             0.79      0.80     1.00    0.38    -0.37
-rsi_14              0.58      0.50     0.38    1.00    -0.43
-vol_21d            -0.52     -0.58    -0.37   -0.43     1.00
+dist_200dma         1.00      0.41     0.79    0.55    -0.64
+drawdown            0.41      1.00     0.48    0.24    -0.27
+mom_12m             0.79      0.48     1.00    0.33    -0.43
+rsi_14              0.55      0.24     0.33    1.00    -0.40
+vol_21d            -0.64     -0.27    -0.43   -0.40     1.00
 
-=== 3m horizon (63 trading days) — 2198 labelled days, ~34 independent windows ===
-Prior P(Up) = 0.732
-                        feature bin  P(bin|Up)  P(bin|Down)  P(bin)  P(Up|bin)    LLR
-       Price vs 200-day avg (%) 4/5      0.194        0.216     0.2      0.711 -0.108
-Distance from all-time high (%) 4/5      0.191        0.224     0.2      0.699 -0.162
-   Trailing 12-month return (%) 3/5      0.175        0.270     0.2      0.639 -0.435
-                        RSI(14) 4/5      0.205        0.185     0.2      0.751  0.100
-   21-day realized vol (ann. %) 2/5      0.196        0.211     0.2      0.717 -0.074
-Naive-Bayes posterior P(Up | all signals) = 0.581   (Σ LLR = -0.680)
+=== 3m horizon (63 trading days) — 6614 labelled days, ~104 independent windows ===
+Prior P(Up) = 0.682
+                        feature bin  P(bin|Up)  P(bin|Down)  P(bin)  P(Up|bin)   LLR
+       Price vs 200-day avg (%) 4/5      0.213        0.172     0.2      0.725 0.211
+Distance from all-time high (%) 5/5      0.211        0.177     0.2      0.718 0.173
+   Trailing 12-month return (%) 4/5      0.207        0.186     0.2      0.704 0.104
+                        RSI(14) 4/5      0.208        0.182     0.2      0.710 0.133
+   21-day realized vol (ann. %) 3/5      0.211        0.175     0.2      0.721 0.187
+Naive-Bayes posterior P(Up | all signals) = 0.828   (Σ LLR = +0.808)
 
-=== 6m horizon (126 trading days) — 2135 labelled days, ~16 independent windows ===
-Prior P(Up) = 0.800
-                        feature bin  P(bin|Up)  P(bin|Down)  P(bin)  P(Up|bin)    LLR
-       Price vs 200-day avg (%) 4/5      0.198        0.206     0.2      0.794 -0.040
-Distance from all-time high (%) 5/5      0.209        0.165     0.2      0.835  0.237
-   Trailing 12-month return (%) 3/5      0.180        0.281     0.2      0.719 -0.446
-                        RSI(14) 4/5      0.195        0.220     0.2      0.780 -0.123
-   21-day realized vol (ann. %) 2/5      0.202        0.190     0.2      0.810  0.062
-Naive-Bayes posterior P(Up | all signals) = 0.746   (Σ LLR = -0.310)
+=== 6m horizon (126 trading days) — 6551 labelled days, ~51 independent windows ===
+Prior P(Up) = 0.727
+                        feature bin  P(bin|Up)  P(bin|Down)  P(bin)  P(Up|bin)   LLR
+       Price vs 200-day avg (%) 4/5      0.204        0.189     0.2      0.742 0.075
+Distance from all-time high (%) 5/5      0.217        0.156     0.2      0.787 0.327
+   Trailing 12-month return (%) 4/5      0.211        0.171     0.2      0.766 0.206
+                        RSI(14) 4/5      0.208        0.179     0.2      0.756 0.148
+   21-day realized vol (ann. %) 3/5      0.221        0.143     0.2      0.804 0.433
+Naive-Bayes posterior P(Up | all signals) = 0.897   (Σ LLR = +1.189)
 
-=== 9m horizon (189 trading days) — 2072 labelled days, ~10 independent windows ===
-Prior P(Up) = 0.847
-                        feature bin  P(bin|Up)  P(bin|Down)  P(bin)  P(Up|bin)    LLR
-       Price vs 200-day avg (%) 4/5      0.183        0.293     0.2      0.776 -0.471
-Distance from all-time high (%) 4/5      0.189        0.262     0.2      0.800 -0.328
-   Trailing 12-month return (%) 3/5      0.200        0.199     0.2      0.847  0.003
-                        RSI(14) 4/5      0.201        0.193     0.2      0.852  0.040
-   21-day realized vol (ann. %) 2/5      0.217        0.106     0.2      0.919  0.717
-Naive-Bayes posterior P(Up | all signals) = 0.842   (Σ LLR = -0.039)
+=== 9m horizon (189 trading days) — 6488 labelled days, ~34 independent windows ===
+Prior P(Up) = 0.756
+                        feature bin  P(bin|Up)  P(bin|Down)  P(bin)  P(Up|bin)   LLR
+       Price vs 200-day avg (%) 4/5      0.212        0.162     0.2      0.802 0.268
+Distance from all-time high (%) 5/5      0.219        0.140     0.2      0.829 0.448
+   Trailing 12-month return (%) 4/5      0.209        0.173     0.2      0.789 0.188
+                        RSI(14) 4/5      0.210        0.168     0.2      0.795 0.225
+   21-day realized vol (ann. %) 3/5      0.229        0.110     0.2      0.866 0.734
+Naive-Bayes posterior P(Up | all signals) = 0.952   (Σ LLR = +1.862)
 
-=== 12m horizon (252 trading days) — 2009 labelled days, ~7 independent windows ===
-Prior P(Up) = 0.854
-                        feature bin  P(bin|Up)  P(bin|Down)  P(bin)  P(Up|bin)    LLR
-       Price vs 200-day avg (%) 4/5      0.174        0.354     0.2      0.742 -0.711
-Distance from all-time high (%) 4/5      0.188        0.273     0.2      0.801 -0.374
-   Trailing 12-month return (%) 3/5      0.211        0.131     0.2      0.904  0.476
-                        RSI(14) 4/5      0.203        0.182     0.2      0.868  0.111
-   21-day realized vol (ann. %) 2/5      0.214        0.121     0.2      0.912  0.567
-Naive-Bayes posterior P(Up | all signals) = 0.863   (Σ LLR = +0.069)
+=== 12m horizon (252 trading days) — 6425 labelled days, ~25 independent windows ===
+Prior P(Up) = 0.798
+                        feature bin  P(bin|Up)  P(bin|Down)  P(bin)  P(Up|bin)   LLR
+       Price vs 200-day avg (%) 4/5      0.217        0.133     0.2      0.865 0.486
+Distance from all-time high (%) 5/5      0.210        0.160     0.2      0.838 0.271
+   Trailing 12-month return (%) 4/5      0.215        0.143     0.2      0.856 0.408
+                        RSI(14) 4/5      0.212        0.153     0.2      0.845 0.323
+   21-day realized vol (ann. %) 3/5      0.226        0.097     0.2      0.902 0.851
+Naive-Bayes posterior P(Up | all signals) = 0.976   (Σ LLR = +2.339)
 
 Bayesian analog model — posterior predictive for QQQ from 2026-09-25
          analogs  n_eff (indep.)  prior mean %  analog mean %  posterior median %  P(up)  P(< -10%)  P(> +10%)  10th pct $  median $  90th pct $
 horizon                                                                                                                                         
-3m           218             6.1         4.706         -0.276               0.932  0.546      0.087      0.150     674.811   751.435     836.760
-6m           212             4.3         9.498          0.059               2.942  0.603      0.120      0.276     661.176   766.400     888.369
-9m           206             4.4        14.387         10.171              11.465  0.795      0.060      0.541     698.037   829.855     986.565
-12m          199             2.6        19.538         12.127              15.305  0.802      0.078      0.613     687.952   858.447    1071.197
+3m           660            18.1         2.108          1.960               1.975  0.597      0.063      0.173     684.176   759.204     842.460
+6m           654            11.2         4.249          4.106               4.128  0.631      0.118      0.325     661.646   775.229     908.311
+9m           647             8.3         6.537          9.805               9.164  0.710      0.117      0.481     659.833   812.726    1001.047
+12m          641             7.4         9.249         12.826              12.054  0.719      0.137      0.538     644.117   834.244    1080.491
 
 Walk-forward out-of-sample scores (BSS > 0 means the model beat the base rate; ~indep. = effective # of test windows)
          tests  ~indep.  actual up-rate  Brier base  Brier NB  Brier analog  BSS NB  BSS analog  IC analog (rank corr)  hit-rate NB
 horizon                                                                                                                            
-3m          57     19.0           0.649       0.248     0.292         0.254  -0.180      -0.025                 -0.080        0.561
-6m          54      9.0           0.741       0.223     0.321         0.275  -0.437      -0.230                 -0.289        0.593
-9m          51      5.7           0.804       0.194     0.214         0.246  -0.100      -0.268                  0.005        0.765
-12m         48      4.0           0.833       0.178     0.180         0.202  -0.008      -0.133                  0.310        0.792
+3m         267     89.0           0.719       0.214     0.254         0.242  -0.186      -0.129                 -0.097        0.629
+6m         264     44.0           0.795       0.200     0.264         0.245  -0.318      -0.220                 -0.242        0.640
+9m         261     29.0           0.835       0.184     0.245         0.238  -0.330      -0.290                 -0.313        0.663
+12m        258     21.5           0.864       0.166     0.212         0.246  -0.272      -0.481                 -0.266        0.713
 
 Where today's closest 12-month analogs come from:
       analog days  weight share %  avg fwd 12m %
 year                                            
-2017         21.0             4.2            1.9
-2018         55.0            41.7            7.0
-2019         15.0             1.8           41.6
-2020          8.0             1.4           43.7
-2021         19.0             3.8          -25.3
-2023          6.0             0.7           33.7
-2024         42.0            16.2           18.0
-2025         33.0            30.3           20.7
+2014         71.0             8.0           12.9
+2015         53.0             9.0           -2.4
+2016          9.0             0.7           22.7
+2017        108.0            17.2           19.4
+2018         80.0            19.4            6.0
+2019         57.0             4.7           40.3
+2020         24.0             2.7           44.1
+2021         61.0             6.6          -21.9
+2023         28.0             3.0           32.9
+2024         83.0            14.7           18.0
+2025         67.0            14.0           23.2
 
 Saved chart → ./qqq_bayes_forecast.png
 
 ==============================================================================
-VERDICT as of 2026-09-25 (QQQ 744.50; data 2017-09-27→2026-09-25)
+VERDICT as of 2026-09-25 (QQQ 744.50; data 2000-03-09→2026-09-25)
 ==============================================================================
-  3m: P(up)=55% (base rate 73%), median +0.9%, 80% band -9% … +12%, out-of-sample skill BSS=-0.03
-  6m: P(up)=60% (base rate 80%), median +2.9%, 80% band -11% … +19%, out-of-sample skill BSS=-0.23
-  9m: P(up)=80% (base rate 85%), median +11.5%, 80% band -6% … +33%, out-of-sample skill BSS=-0.27
- 12m: P(up)=80% (base rate 85%), median +15.3%, 80% band -8% … +44%, out-of-sample skill BSS=-0.13
+  3m: P(up)=60% (base rate 68%), median +2.0%, 80% band -8% … +13%, out-of-sample skill BSS=-0.13
+  6m: P(up)=63% (base rate 73%), median +4.1%, 80% band -11% … +22%, out-of-sample skill BSS=-0.22
+  9m: P(up)=71% (base rate 76%), median +9.2%, 80% band -11% … +34%, out-of-sample skill BSS=-0.29
+ 12m: P(up)=72% (base rate 80%), median +12.1%, 80% band -13% … +45%, out-of-sample skill BSS=-0.48
 
 Read BSS as: >0 beat the base rate, ≤0 no better than just using the base rate.

@@ -2,7 +2,7 @@
 
 - `QQQ_Bayesian_Forecast.ipynb`: open in Google Colab and choose Run all. It asks you to upload the QQQ xlsx, then pulls QQQ back to 1999 with `yfinance` and splices it onto your file.
 - `qqq_bayesian_forecast.py`: the same code as a plain script (`# %%` cells).
-- `run_output.txt` / `qqq_bayes_forecast.png`: a run on the uploaded export only (2016-09-27 → 2026-09-25). It had no pre-2016 data because this sandbox had no internet.
+- `run_output.txt` / `qqq_bayes_forecast.png`: a run on the full export, 1999-03-11 → 2026-09-25 (signals start 2000-03 once the 12-month lookback fills).
 
 ## Method
 Signals, all known on the day they are measured: price vs the 200-day average, distance from the all-time high, 12-month momentum, RSI(14), and 21-day realized volatility.
