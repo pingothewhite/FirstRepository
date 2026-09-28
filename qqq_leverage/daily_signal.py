@@ -2,17 +2,24 @@
 #  QQQ DAILY SIGNAL — what leverage to hold tomorrow
 #  Run after the close (Colab or local). Same rules as the v6
 #  dashboard's recommended mode:
-#    regime ON  -> leverage = clip(32% / vol, 1.0, 1.6)
+#    regime ON  -> leverage from volatility buckets (default):
+#                    vol < 18% -> 1.6x | 18-22% -> 1.4x | 22-26% -> 1.2x | >= 26% -> 1.0x
+#                  (or continuous: clip(vol_target / vol, 1.0, 1.6))
 #                  +0.4 while QQQ <= 80% of its 52-week high
 #                  +0.3 more while QQQ <= 75% of it
 #                  trade only when the target moves >= 0.1
 #    regime OFF -> 100% SGOV
 #  Regime: 200-day SMA band; ON after 3 closes above SMA x 1.04,
 #  OFF after 15 closes below SMA x 0.92 (counts reset as in v5).
+#  WHEN TO RUN: every Friday after the close, PLUS any day QQQ closes
+#  up or down 3% or more, PLUS daily once QQQ closes below the
+#  regime exit line (SMA x 0.92). Tested: this matches daily checking.
 #  NOT FINANCIAL ADVICE.
 # ============================================================
 current_leverage = 1.3     # what you hold right now (0 if in SGOV)
-vol_target, lev_min, lev_max = 0.32, 1.0, 1.6
+use_buckets = True
+buckets = [(0.18, 1.6), (0.22, 1.4), (0.26, 1.2), (9.99, 1.0)]
+vol_target, lev_min, lev_max = 0.28, 1.0, 1.6
 dip1, add1, dip2, add2 = 0.20, 0.4, 0.25, 0.3
 rebalance_band = 0.10
 
@@ -62,7 +69,7 @@ last = p[-1]
 
 target = 0.0
 if state == 1:
-    target = float(np.clip(vol_target / vol, lev_min, lev_max))
+    target = next(l for c, l in buckets if vol < c) if use_buckets else float(np.clip(vol_target / vol, lev_min, lev_max))
     target += add1 if last <= hi52 * (1 - dip1) else 0.0
     target += add2 if last <= hi52 * (1 - dip2) else 0.0
     target = min(target, 2.0)
@@ -80,5 +87,5 @@ print(f"  Regime exit zone : closes below {lower[-1]:,.2f} (15 of them -> SGOV)"
 print(f"  Regime re-entry  : 3 closes above {upper[-1]:,.2f} when OFF")
 print(f"  Dip add +{add1}x    : QQQ at or below {hi52*(1-dip1):,.2f}")
 print(f"  Dip add +{add2}x more: QQQ at or below {hi52*(1-dip2):,.2f}")
-print("\nVolatility -> base leverage:  " + "  ".join(
-    f"{s:.0%}->{np.clip(vol_target/s, lev_min, lev_max):.2f}x" for s in (0.16, 0.20, 0.24, 0.28, 0.32)))
+print("\nVolatility buckets: <18% 1.6x | 18-22% 1.4x | 22-26% 1.2x | >=26% 1.0x  (+0.4 at -20%, +0.3 more at -25%)")
+print(f"Extra check trigger: any close beyond {last*0.97:,.2f} / {last*1.03:,.2f} (3% move from today)")

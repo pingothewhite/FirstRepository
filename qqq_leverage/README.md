@@ -132,3 +132,15 @@ Each step adds one change on top of the previous one. Return and max drawdown ar
 | 6. + fixed $6.5k (drop the 0.7% add-on) | — | — | — | $1.67M | 9.2% (24.8%) |
 
 Same risk at $900k as $760k at $6.5k: about **$7,700/mo**, i.e. the same ~10.3% withdrawal rate (`results/buildup_and_900k_match.csv`).
+
+### Checking weekly instead of daily
+Tested on the volatility-bucket rule (<18% 1.6x, 18–22% 1.4x, 22–26% 1.2x, ≥26% 1.0x, plus the dip add-on). Plan figures are $760k at $6.5k, no margin model.
+
+| When you check | Annual return (history) | Median CAGR (MC, 2005 pool) | Plan ruin, 2005 pool / 1999 pool |
+|---|---|---|---|
+| Every day | 19.1% | 14.7% | 9.1% / 24.8% |
+| Fridays only | 18.1% | 14.3% | 10.5% / 26.1% |
+| **Fridays + any day QQQ moves ≥3%** (about 16 extra days a year) | 19.0% | 14.8% | 9.3% / 24.8% |
+| Flat 1.3x (for reference) | 16.7% | 13.6% | 11.2% / 31.4% |
+
+The buckets perform the same as the continuous formula (history 19.1% vs 19.2%).
