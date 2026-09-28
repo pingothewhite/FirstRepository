@@ -1,0 +1,99 @@
+# ============================================================
+# QQQ LEVERAGE SIGNAL  (thinkorswim lower study)
+# Apply to a DAILY QQQ chart with a long time frame (20Y or Max)
+# so the 200-day regime has enough history.
+#
+# Regime (same as the research):
+#   ON  after 3 closes above 200-day SMA x 1.04
+#   OFF after 15 closes below 200-day SMA x 0.92  -> 100% SGOV
+# Leverage while ON:
+#   useVolTable = yes : vol <18% 1.6x | 18-22% 1.4x | 22-26% 1.2x | >=26% 1.0x
+#   useVolTable = no  : flatLeverage (e.g. 1.3x)
+#   + 0.4 while close <= 80% of the 52-week closing high
+#   + 0.3 more while close <= 75% of it           (cap 2.0x)
+# Volatility = EWMA of daily close-to-close % returns,
+#   10-day half-life, annualised (x sqrt 252).
+# Trade only when the target differs from what you hold by >= 0.1.
+# NOT FINANCIAL ADVICE.
+# ============================================================
+declare lower;
+
+input useVolTable  = yes;
+input flatLeverage = 1.3;
+input volHalfLife  = 10;
+input smaLength    = 200;
+input bandUp       = 0.04;
+input bandDown     = 0.08;
+input entryDays    = 3;
+input exitDays     = 15;
+input dip1         = 0.20;
+input add1         = 0.4;
+input dip2         = 0.25;
+input add2         = 0.3;
+input maxLeverage  = 2.0;
+
+# ---------- regime (200-day SMA band with persistent counters)
+def sma   = Average(close, smaLength);
+def upper = sma * (1 + bandUp);
+def lower = sma * (1 - bandDown);
+def isUp  = close > upper;
+def isDn  = close < lower;
+
+def aCnt;
+def bCnt;
+def state;
+def aRaw  = if isUp then aCnt[1] + 1 else if isDn then 0 else aCnt[1];
+def bRaw  = if isDn then bCnt[1] + 1 else if isUp then 0 else bCnt[1];
+def goIn  = state[1] == 0 and aRaw >= entryDays;
+def goOut = state[1] == 1 and bRaw >= exitDays;
+if IsNaN(sma[1]) {
+    state = if !IsNaN(sma) and close > sma then 1 else 0;
+    aCnt = 0;
+    bCnt = 0;
+} else {
+    state = if goIn then 1 else if goOut then 0 else state[1];
+    aCnt = if goIn or goOut then 0 else aRaw;
+    bCnt = if goIn or goOut then 0 else bRaw;
+}
+
+# ---------- volatility (EWMA, 10-day half-life, annualised)
+def ret = if IsNaN(close[1]) then 0 else close / close[1] - 1;
+def lam = Power(0.5, 1.0 / volHalfLife);
+def ewVar = CompoundValue(1, lam * ewVar[1] + (1 - lam) * ret * ret, ret * ret);
+def vol = Sqrt(252 * ewVar);
+
+# ---------- deep-dip adds (from 52-week closing high)
+def hi52 = Highest(close, 252);
+def dipAdd = (if close <= hi52 * (1 - dip1) then add1 else 0)
+           + (if close <= hi52 * (1 - dip2) then add2 else 0);
+
+# ---------- target leverage
+def baseLev = if !useVolTable then flatLeverage
+              else if vol < 0.18 then 1.6
+              else if vol < 0.22 then 1.4
+              else if vol < 0.26 then 1.2
+              else 1.0;
+def target = if state == 1 then Min(maxLeverage, baseLev + dipAdd) else 0;
+
+plot Leverage = target;
+Leverage.SetDefaultColor(Color.CYAN);
+Leverage.SetLineWeight(2);
+Leverage.SetPaintingStrategy(PaintingStrategy.STEP);
+plot L10 = 1.0;
+plot L16 = 1.6;
+plot L20 = 2.0;
+L10.SetDefaultColor(Color.DARK_GRAY);
+L16.SetDefaultColor(Color.DARK_GRAY);
+L20.SetDefaultColor(Color.DARK_GRAY);
+
+# ---------- labels (read these on your check days)
+AddLabel(yes, if state == 1 then "Regime ON" else "Regime OFF -> 100% SGOV",
+         if state == 1 then Color.GREEN else Color.RED);
+AddLabel(yes, "Target " + Round(target, 1) + "x", Color.CYAN);
+AddLabel(target >= 1, "QLD " + AsPercent(target - 1) + " / QQQ " + AsPercent(2 - target), Color.CYAN);
+AddLabel(yes, "Vol " + AsPercent(vol), if vol < 0.18 then Color.GREEN else if vol < 0.26 then Color.YELLOW else Color.RED);
+AddLabel(yes, "From 52w high " + AsPercent(close / hi52 - 1), Color.GRAY);
+AddLabel(yes, "Dip adds at " + AsDollars(hi52 * (1 - dip1)) + " / " + AsDollars(hi52 * (1 - dip2)), Color.GRAY);
+AddLabel(yes, "Exit line " + AsDollars(lower) + "  (" + bCnt + "/" + exitDays + " closes below)",
+         if bCnt > 0 then Color.ORANGE else Color.GRAY);
+AddLabel(yes, "3% check: " + AsDollars(close[1] * 0.97) + " / " + AsDollars(close[1] * 1.03), Color.GRAY);

@@ -144,3 +144,8 @@ Tested on the volatility-bucket rule (<18% 1.6x, 18–22% 1.4x, 22–26% 1.2x, �
 | Flat 1.3x (for reference) | 16.7% | 13.6% | 11.2% / 31.4% |
 
 The buckets perform the same as the continuous formula (history 19.1% vs 19.2%).
+
+### thinkorswim study
+`QQQ_leverage_signal.thinkscript` is the same rule as a thinkorswim lower study. Apply it to a daily QQQ chart with a 20-year or Max time frame. Setting `useVolTable = no` gives the flat-base version (flatLeverage + dip adds).
+
+A line-by-line Python port of the script matches the research engine on every day from 2000 to 2026 (regime and target, 100% agreement). The script itself was not run inside thinkorswim.
