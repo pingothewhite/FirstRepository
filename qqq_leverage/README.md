@@ -149,3 +149,27 @@ The buckets perform the same as the continuous formula (history 19.1% vs 19.2%).
 `QQQ_leverage_signal.thinkscript` is the same rule as a thinkorswim lower study. Apply it to a daily QQQ chart with a 20-year or Max time frame. Setting `useVolTable = no` gives the flat-base version (flatLeverage + dip adds).
 
 A line-by-line Python port of the script matches the research engine on every day from 2000 to 2026 (regime and target, 100% agreement). The script itself was not run inside thinkorswim.
+
+### 2005–2026 only (excludes the 2000–02 bust)
+History from Jan 2005, with the regime state carried in from before:
+
+| Rule | Annual return | Max drawdown |
+|---|---|---|
+| Flat 1.0x | 15.8% | −28.6% |
+| Flat 1.3x | 18.4% | −36.2% |
+| Flat 1.6x | 20.7% | −43.3% |
+| Ladder 1.3 → 1.5 at −10% | 20.1% | −39.2% |
+| Flat 1.3 + dip adds | 20.1% | −32.8% |
+| **Vol table + dip adds** | **20.6%** | **−29.6%** |
+| Buy & hold QQQ | 14.2% | −53.7% |
+
+**Rolling 10-year plan windows on the real 2005+ sequence** ($760k, $6.5k floor or 0.7%, no margin model, 141 monthly starts 2005–2016): no rule ran out of money.
+
+| Rule | Median at yr 10 | Worst window end | Lowest balance in the worst window |
+|---|---|---|---|
+| Flat 1.3x | $2.08M | $590k | $384k |
+| Vol table + dip adds | $2.61M | $773k | $379k |
+
+The windows overlap heavily, so they amount to only about two independent decades.
+
+**Dip frequency.** Drops of 20%+ below the 52-week high while the regime was ON: 2000-04, 2008-01, 2018-12, 2020-03, 2022-03, 2025-04. That is about one every 4–5 years. Drops of 25%+ while ON: only 2000-04 and 2020-03.
